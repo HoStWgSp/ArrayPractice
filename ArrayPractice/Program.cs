@@ -9,56 +9,38 @@ namespace ArrayPractice
 {
     internal class Program
     {
-        // объявим потокобезопасную очередь (полностью идентична обычной очереди, но
-        // позволяет безопасный доступ
-        // из разных потоков)
-        public static ConcurrentQueue<string> words = new ConcurrentQueue<string>();
+        // объявим список в виде статической переменной
+        public static LinkedList<string> LinkedList = new LinkedList<string>();
 
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Введите слово и нажмите Enter, чтобы добавить его в очередь.");
-            Console.WriteLine();
+            //  создаём пустой список с типом данных Contact
+            var phoneBook = new List<Contact>();
 
-            //  запустим обработку очереди в отдельном потоке
-            StartQueueProcessing();
+            // добавляем контакты
+            phoneBook.Add(new Contact("Игорь", 79990000000, "igor@example.com"));
 
-            while (true)
-            {
-                var input = Console.ReadLine();
-                // если введена нужная нам команда - смотрим, кто крайний в очереди
-                if (input == "peek")
-                {
-                    if (words.TryPeek(out var elem))
-                        Console.WriteLine(elem);
-                }
-                else
-                {
-                    // если не введена - ставим элемент в очередь, как и обычно
-                    words.Enqueue(input);
-                }
+            // Добавим несколько элементов
+            LinkedList.AddFirst("Лиса");
+            LinkedList.AddFirst("Волк");
+            // запускаем новый таймер
+            var stopWatch = Stopwatch.StartNew();
 
-                // words.Enqueue(input); // ИЗМЕНИТЬ ЗДЕСЬ
-            }
+            LinkedList.AddFirst("Заяц");
+
+            // смотрим, сколько операция заняла, в миллисекундах
+            Console.WriteLine("Добавление в LinkedList<T> составляет {0} мс",stopWatch.Elapsed.TotalMilliseconds);
+
+
+            // запускаем новый таймер
+            stopWatch = Stopwatch.StartNew();
+            // добавляем контакты
+            phoneBook.Add(new Contact("Антон", 79990000000, "igor@example.com"));
+            // смотрим, сколько операция заняла, в миллисекундах
+            Console.WriteLine("Добавление в List<T> составляет {0} мс", stopWatch.Elapsed.TotalMilliseconds);
 
             Console.ReadKey();
-        }
-        // метод, который обрабатывает и разбирает нашу очередь в отдельном потоке
-        // ( для выполнения задания изменять его не нужно )
-        static void StartQueueProcessing()
-        {
-            new Thread(() =>
-            {
-                Thread.CurrentThread.IsBackground = true;
-
-                while (true)
-                {
-                    Thread.Sleep(5000);
-                    if (words.TryDequeue(out var element))
-                        Console.WriteLine("======>  " + element + " прошел очередь");
-                }
-
-            }).Start();
         }
     }
 }
