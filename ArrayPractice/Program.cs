@@ -9,37 +9,33 @@ namespace ArrayPractice
 {
     internal class Program
     {
-        // объявим список в виде статической переменной
-        public static LinkedList<string> LinkedList = new LinkedList<string>();
-
-
+        private static Dictionary<string,int> words = new Dictionary<string, int>();
         static void Main(string[] args)
         {
-            //  создаём пустой список с типом данных Contact
-            var phoneBook = new List<Contact>();
+            // читаем весь файл с рабочего стола в строку текста
+            string text = File.ReadAllText(@"C:\Users\gridar\Desktop\Text.txt");
 
-            // добавляем контакты
-            phoneBook.Add(new Contact("Игорь", 79990000000, "igor@example.com"));
+            var noPunctuationText = new string(text.Where(c => !char.IsPunctuation(c)).ToArray());
+            // Сохраняем символы-разделители в массив
+            char[] delimiters = new char[] { ' ', '\r', '\n' };
 
-            // Добавим несколько элементов
-            LinkedList.AddFirst("Лиса");
-            LinkedList.AddFirst("Волк");
-            // запускаем новый таймер
-            var stopWatch = Stopwatch.StartNew();
+            // разбиваем нашу строку текста, используя ранее перечисленные символы-разделители
+            var allWords = noPunctuationText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
-            LinkedList.AddFirst("Заяц");
-
-            // смотрим, сколько операция заняла, в миллисекундах
-            Console.WriteLine("Добавление в LinkedList<T> составляет {0} мс",stopWatch.Elapsed.TotalMilliseconds);
-
-
-            // запускаем новый таймер
-            stopWatch = Stopwatch.StartNew();
-            // добавляем контакты
-            phoneBook.Add(new Contact("Антон", 79990000000, "igor@example.com"));
-            // смотрим, сколько операция заняла, в миллисекундах
-            Console.WriteLine("Добавление в List<T> составляет {0} мс", stopWatch.Elapsed.TotalMilliseconds);
-
+            foreach ( var word in allWords )
+            {
+                if (words.Keys.Contains(word)) words[word]++;
+                else words.Add(word, 1);
+            }
+            string S = ""; int k = 0;
+            //Отбираем 10 наиболее частотных слов и в нашем случае отображем их в сообщении
+            foreach (KeyValuePair<string, int> kk in words.OrderByDescending(x => x.Value))
+            {
+                S += kk.Key + " " + kk.Value.ToString() + "\n";
+                k++;
+                if (k == 10) break;
+            }
+            Console.WriteLine(S);
             Console.ReadKey();
         }
     }
