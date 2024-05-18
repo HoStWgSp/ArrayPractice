@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Text;
 
 namespace ArrayPractice
 {
@@ -6,30 +7,47 @@ namespace ArrayPractice
     {
         static void Main(string[] args)
         {
-            var months = new[]
+            // Объявим ArrayList с элементами разных типов
+            var arrayList = new ArrayList()
+           {
+               1,
+               "Андрей ",
+               "Сергей ",
+               300,
+           };
+
+            // переменная для хранения суммы
+            int sum = 0;
+
+            // переменная для хранения текста.
+            // Можно было бы использовать String, но в случае когда необходимо выполнять много
+            // операций с одной строкой - лучше использовать класс StringBuilder
+            StringBuilder text = new StringBuilder();
+
+            // проходим список и проверяем элементы на соответствие типу
+            foreach (var element in arrayList)
+            {
+                //   если целое число - увеличиваем счётчик
+                if (element is int)
                 {
-                   "Jan", "Feb", "Mar", "Apr", "May" , "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-                };
+                    sum += (int)element;
+                }
 
-            var numbers = new[]
-            {
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
-            };
-            // инициализация ArrayList
-            var combinedList = new ArrayList();
-
-            //  пробегаемся по массиву чисел
-            foreach (var number in numbers)
-            {
-                // добавляем в ArrayList строку месяца (начинаем с нулевого по индексу)
-                combinedList.Add(months[number - 1]);
-
-                // добавляем его порядковый номер
-                combinedList.Add(number);
+                // если строка - добавляем текст из неё
+                if (element is string s)
+                {
+                    text.Append(element);
+                }
             }
 
-            foreach (var value in combinedList)
-                Console.WriteLine(value);
+            // результат
+            var result = new ArrayList() { sum, text.ToString() };
+
+            // вывод
+            foreach (var elem in result)
+            {
+                Console.WriteLine(elem);
+            }
 
             Console.ReadKey();
         }
