@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Text;
+using static ArrayPractice.Program;
 
 namespace ArrayPractice
 {
@@ -7,49 +9,52 @@ namespace ArrayPractice
     {
         static void Main(string[] args)
         {
-            // Объявим ArrayList с элементами разных типов
-            var arrayList = new ArrayList()
-           {
-               1,
-               "Андрей ",
-               "Сергей ",
-               300,
-           };
+            List<Contact> list = new List<Contact>();
+            list.Add(new Contact("Алекс", 89995864123, "авыаы"));
+            list.Add(new Contact("Миша", 89664555921, "deqdwfa"));
 
-            // переменная для хранения суммы
-            int sum = 0;
 
-            // переменная для хранения текста.
-            // Можно было бы использовать String, но в случае когда необходимо выполнять много
-            // операций с одной строкой - лучше использовать класс StringBuilder
-            StringBuilder text = new StringBuilder();
 
-            // проходим список и проверяем элементы на соответствие типу
-            foreach (var element in arrayList)
-            {
-                //   если целое число - увеличиваем счётчик
-                if (element is int)
-                {
-                    sum += (int)element;
-                }
-
-                // если строка - добавляем текст из неё
-                if (element is string s)
-                {
-                    text.Append(element);
-                }
-            }
-
-            // результат
-            var result = new ArrayList() { sum, text.ToString() };
-
-            // вывод
-            foreach (var elem in result)
-            {
-                Console.WriteLine(elem);
-            }
+            AddUnique(new Contact("Алfesdaекс", 89995864123, "авыаы"), list);
 
             Console.ReadKey();
+        }
+        public class Contact // модель класса
+        {
+            public Contact(string name, long phoneNumber, String email) // метод-конструктор
+            {
+                Name = name;
+                PhoneNumber = phoneNumber;
+                Email = email;
+            }
+
+            public String Name { get; }
+            public long PhoneNumber { get; }
+            public String Email { get; }
+        }
+        private static void AddUnique(Contact newContact, List<Contact> phoneBook)
+        {
+            bool alreadyExists = false;
+
+            // пробегаемся по списку и смотрим, есть ли уже с таким именем
+            foreach (var contact in phoneBook)
+            {
+                if (contact.Name == newContact.Name)
+                {
+                    //  если вдруг находим  -  выставляем флаг и прерываем цикл
+                    alreadyExists = true;
+                    break;
+                }
+            }
+
+            if (!alreadyExists)
+                phoneBook.Add(newContact);
+
+            //  сортируем список по имени
+            phoneBook.Sort((x, y) => String.Compare(x.Name, y.Name, StringComparison.Ordinal));
+
+            foreach (var contact in phoneBook)
+                Console.WriteLine(contact.Name + ": " + contact.PhoneNumber);
         }
     }
 }
