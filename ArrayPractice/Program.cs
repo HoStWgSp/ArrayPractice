@@ -9,33 +9,37 @@ namespace ArrayPractice
     {
         static void Main(string[] args)
         {
-            var months = new List<string>()
-                {
-                   "Jan", "Feb", "Mar", "Apr", "May"
-                };
-            var missing = new ArrayList()
-                {
-                   1, 2, 3, 5, "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-                };
+            // Сохраняем предложение в строку
+            var sentence =
+                "Подсчитайте, сколько уникальных символов в этом предложении, используя HashSet<T>, учитывая знаки препинания, но не учитывая пробелы в начале и в конце предложения.";
 
-            GetMissing(months, missing);
+            // сохраняем в массив char
+            var characters = sentence.ToCharArray();
+
+            var symbols = new HashSet<char>();
+
+            // добавляем во множество. Сохраняются только неповторяющиеся символы
+            foreach (var symbol in characters)
+                symbols.Add(symbol);
+
+            // Выводим результат
+            Console.WriteLine(symbols.Count);
+            // сохраняем знаки препинания в массив Char
+            var signs = new[] { ',', ' ', '.' };
+
+            // сохраняем числовые символы в массив Char
+            var numbers = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
+            //  Проверяем, есть ли цифры
+            bool containsNumbers = symbols.Overlaps(numbers);
+            Console.WriteLine($"Коллекция содержит цифры: {containsNumbers}");
+
+            // Отбрасываем знаки препинания и заново считаем
+            symbols.ExceptWith(signs);
+            Console.WriteLine($"Символов без знаков препинания:: {symbols.Count}");
 
             Console.ReadKey();
-        }
-        private static void GetMissing(List<string> months, ArrayList missing)
-        {
-            // инициализируем массив для 7 нужных нам недостающих элементов
-            var missedArray = new string[7];
 
-            // извлекаем эти элементы из ArrayList, и копируем в массив
-            missing.GetRange(4, 7).CopyTo(missedArray);
-
-            // Добавляем наш массив в конец списка
-            months.AddRange(missedArray);
-
-            // смотрим, что получилось
-            foreach (var month in months)
-                Console.WriteLine(month);
         }
     }
 }
