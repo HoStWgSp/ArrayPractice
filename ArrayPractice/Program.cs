@@ -4,25 +4,18 @@
     {
         static void Main(string[] args)
         {
-            //  вернет true
-            Console.WriteLine(CheckAscending(new[] { -1, 2, 3, 4, 8 }));
+            // читаем весь файл с рабочего стола в строку текста
+            string text = File.ReadAllText(@"C:\Users\gridar\Desktop\Text.txt");
 
-            //  вернет false
-            Console.WriteLine(CheckAscending(new[] { -1, 2, 3, 10, 8 }));
+            // Сохраняем символы-разделители в массив
+            char[] delimiters = new char[] { ' ', '\r', '\n' };
+
+            // разбиваем нашу строку текста, используя ранее перечисленные символы-разделители
+            var words = text.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            // выводим количество
+            Console.WriteLine(words.Length);
 
             Console.ReadKey();
-        }
-
-        static bool CheckAscending(int[] numbers)
-        {
-            //  используем цикл for для обхода массива
-            for (int i = 0; i < numbers.Length - 1; i++)
-            {
-                //  проверяем следующий элемент на предмет того, что он меньше предыдушего
-                if (numbers[i + 1] < numbers[i])
-                    return false;
-            }
-            return true;
         }
     }
 }
