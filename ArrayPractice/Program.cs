@@ -9,52 +9,33 @@ namespace ArrayPractice
     {
         static void Main(string[] args)
         {
-            List<Contact> list = new List<Contact>();
-            list.Add(new Contact("Алекс", 89995864123, "авыаы"));
-            list.Add(new Contact("Миша", 89664555921, "deqdwfa"));
+            var months = new List<string>()
+                {
+                   "Jan", "Feb", "Mar", "Apr", "May"
+                };
+            var missing = new ArrayList()
+                {
+                   1, 2, 3, 5, "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                };
 
-
-
-            AddUnique(new Contact("Алfesdaекс", 89995864123, "авыаы"), list);
+            GetMissing(months, missing);
 
             Console.ReadKey();
         }
-        public class Contact // модель класса
+        private static void GetMissing(List<string> months, ArrayList missing)
         {
-            public Contact(string name, long phoneNumber, String email) // метод-конструктор
-            {
-                Name = name;
-                PhoneNumber = phoneNumber;
-                Email = email;
-            }
+            // инициализируем массив для 7 нужных нам недостающих элементов
+            var missedArray = new string[7];
 
-            public String Name { get; }
-            public long PhoneNumber { get; }
-            public String Email { get; }
-        }
-        private static void AddUnique(Contact newContact, List<Contact> phoneBook)
-        {
-            bool alreadyExists = false;
+            // извлекаем эти элементы из ArrayList, и копируем в массив
+            missing.GetRange(4, 7).CopyTo(missedArray);
 
-            // пробегаемся по списку и смотрим, есть ли уже с таким именем
-            foreach (var contact in phoneBook)
-            {
-                if (contact.Name == newContact.Name)
-                {
-                    //  если вдруг находим  -  выставляем флаг и прерываем цикл
-                    alreadyExists = true;
-                    break;
-                }
-            }
+            // Добавляем наш массив в конец списка
+            months.AddRange(missedArray);
 
-            if (!alreadyExists)
-                phoneBook.Add(newContact);
-
-            //  сортируем список по имени
-            phoneBook.Sort((x, y) => String.Compare(x.Name, y.Name, StringComparison.Ordinal));
-
-            foreach (var contact in phoneBook)
-                Console.WriteLine(contact.Name + ": " + contact.PhoneNumber);
+            // смотрим, что получилось
+            foreach (var month in months)
+                Console.WriteLine(month);
         }
     }
 }
